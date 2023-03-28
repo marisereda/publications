@@ -12,74 +12,83 @@ import {
 } from "react-native";
 import { Input } from "../components/Input";
 import { SecuredInput } from "../components/SecuredInput";
+import { useAuthGlobal } from "../globalStore";
+import { useScreen } from "../hooks/useScreen";
 
-export const LoginScreen = () => {
+export const LoginScreen = ({ navigation }) => {
+  const [isAuth, setIsAuth] = useAuthGlobal();
   const [passwordSecure, setPasswordSecure] = useState(true);
-  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const keyboardHide = () => {
-    setIsShowKeyboard(false);
-    Keyboard.dismiss();
-  };
+  const { screenWidth, isShowKeyboard, hideKeyboard, showKeyboard } = useScreen();
 
   // -------------- Submit enter --------------
   const handleSubmit = () => {
-    keyboardHide();
-    // console.log(name, email, password);
+    hideKeyboard();
     console.log(`email:${email}`);
     console.log(`password:${password}`);
     setEmail("");
     setPassword("");
     setPasswordSecure(true);
+    setIsAuth(true);
   };
 
   return (
-    <TouchableWithoutFeedback onPress={keyboardHide}>
-      <ImageBackground source={require("../assets/images/photo-bg.jpg")} style={styles.backgroundImage}>
-        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : ""}>
-          <TouchableWithoutFeedback onPress={keyboardHide}>
-            <View style={{ ...styles.form, paddingBottom: isShowKeyboard ? 32 : 144 }}>
-              <Text style={styles.title}>Enter</Text>
-              <View style={styles.fieldsWrap}>
-                <Input
-                  textContentType="emailAddress"
-                  placeholder="Email"
-                  value={email}
-                  onChangeText={setEmail}
-                  showKeyboard={setIsShowKeyboard}
-                />
+    <View style={styles.container}>
+      <TouchableWithoutFeedback onPress={hideKeyboard}>
+        <ImageBackground source={require("../assets/images/photo-bg.jpg")} style={styles.backgroundImage}>
+          <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : ""}>
+            <TouchableWithoutFeedback onPress={hideKeyboard}>
+              <View style={{ ...styles.form, paddingBottom: isShowKeyboard ? 32 : 144, width: screenWidth }}>
+                <Text style={styles.title}>Enter</Text>
+                <View style={styles.fieldsWrap}>
+                  <Input
+                    textContentType="emailAddress"
+                    placeholder="Email"
+                    value={email}
+                    onChangeText={setEmail}
+                    showKeyboard={showKeyboard}
+                  />
 
-                <SecuredInput
-                  textContentType="password"
-                  placeholder="Password"
-                  value={password}
-                  onChangeText={setPassword}
-                  showKeyboard={setIsShowKeyboard}
-                  passwordSecure={passwordSecure}
-                  onPress={setPasswordSecure}
-                />
-              </View>
-              {!isShowKeyboard && (
-                <View>
-                  <TouchableOpacity style={styles.buttonSubmit} onPress={handleSubmit}>
-                    <Text style={styles.textButton}>Sign in</Text>
-                  </TouchableOpacity>
-                  <Text style={styles.text}>
-                    Haven't got an account yet? <Text style={styles.link}>Sign up</Text>
-                  </Text>
+                  <SecuredInput
+                    textContentType="password"
+                    placeholder="Password"
+                    value={password}
+                    onChangeText={setPassword}
+                    showKeyboard={showKeyboard}
+                    passwordSecure={passwordSecure}
+                    onPress={setPasswordSecure}
+                  />
                 </View>
-              )}
-            </View>
-          </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
-      </ImageBackground>
-    </TouchableWithoutFeedback>
+                {!isShowKeyboard && (
+                  <View>
+                    <TouchableOpacity style={styles.buttonSubmit} onPress={handleSubmit}>
+                      <Text style={styles.textButton}>Sign in</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.text}>
+                      Haven't got an account yet?{" "}
+                      <Text style={styles.link} onPress={() => navigation.navigate("Register")}>
+                        Sign up
+                      </Text>
+                    </Text>
+                  </View>
+                )}
+              </View>
+            </TouchableWithoutFeedback>
+          </KeyboardAvoidingView>
+        </ImageBackground>
+      </TouchableWithoutFeedback>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "green",
+
+    justifyContent: "center",
+  },
   backgroundImage: {
     flex: 1,
     resizeMode: "cover",
@@ -123,5 +132,7 @@ const styles = StyleSheet.create({
     color: "#1B4371",
     textAlign: "center",
   },
-  link: {},
+  link: {
+    color: "#FF6C00",
+  },
 });

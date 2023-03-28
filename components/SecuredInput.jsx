@@ -1,5 +1,4 @@
 import { Input } from "./Input";
-import { useState, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -9,7 +8,7 @@ export const SecuredInput = ({
   value,
   onChangeText,
   onPress,
-  passwordSecure,
+  isPasswordSecured,
   showKeyboard,
 }) => {
   return (
@@ -20,17 +19,17 @@ export const SecuredInput = ({
         value={value}
         onChangeText={onChangeText}
         showKeyboard={showKeyboard}
-        secureTextEntry={passwordSecure}
+        secureTextEntry={isPasswordSecured}
       />
       <View style={styles.passwordWrap}>
         <Ionicons.Button
-          name={passwordSecure ? "eye-off" : "eye"}
+          name={isPasswordSecured ? "eye-off" : "eye"}
           size={24}
           iconStyle={{ marginRight: 0 }}
           color="#FF6C00"
           style={styles.iconButton}
           backgroundColor="transparent"
-          onPress={() => onPress(!passwordSecure)}
+          onPress={() => onPress(!isPasswordSecured)}
         ></Ionicons.Button>
       </View>
     </View>
@@ -40,7 +39,8 @@ export const SecuredInput = ({
 const styles = StyleSheet.create({
   passwordWrap: {
     position: "absolute",
-    alignItems: "flex-end",
+    // alignItems: "flex-end",
+    // justifyContent: "center",
     top: 0,
     right: 0,
     height: "100%",

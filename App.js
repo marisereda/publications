@@ -1,15 +1,21 @@
-import { useCallback, useState, useEffect } from "react";
-import { StyleSheet, View } from "react-native";
+import { useCallback } from "react";
+import { StyleSheet } from "react-native";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { RegistrationScreen } from "./screens/RegistrationScreen";
-import { LoginScreen } from "./screens/LoginScreen";
+import { NavigationContainer } from "@react-navigation/native";
+import { Route } from "./components/Route";
+import { useAuthGlobal } from "./globalStore";
+
+// SplashScreen.preventAutoHideAsync();
 
 export default function App() {
+  const [isAuth, setIsAuth] = useAuthGlobal();
+
   const [fontsLoaded] = useFonts({
     "Roboto-Regular": require("./assets/fonts/Roboto/Roboto-Regular.ttf"),
     "Roboto-Medium": require("./assets/fonts/Roboto/Roboto-Medium.ttf"),
   });
+
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {
       await SplashScreen.hideAsync();
@@ -21,10 +27,9 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
-      {/* <RegistrationScreen /> */}
-      <LoginScreen />
-    </View>
+    <NavigationContainer>
+      <Route isAuth={isAuth} />
+    </NavigationContainer>
   );
 }
 

@@ -1,5 +1,7 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState } from "react";
 import * as DocumentPicker from "expo-document-picker";
+import { useAuthGlobal } from "../globalStore";
+
 import {
   StyleSheet,
   View,
@@ -7,41 +9,23 @@ import {
   Text,
   KeyboardAvoidingView,
   Platform,
-  Keyboard,
   TouchableWithoutFeedback,
   ImageBackground,
-  Dimensions,
 } from "react-native";
 import { Input } from "../components/Input";
 import { SecuredInput } from "../components/SecuredInput";
 import { Avatar } from "../components/Avatar";
+import { useScreen } from "../hooks/useScreen";
 
-export const RegistrationScreen = () => {
-  const [screenWidth, setScreenWidth] = useState(Dimensions.get("window").width);
-  const [passwordSecure, setPasswordSecure] = useState(true);
-  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+export const RegistrationScreen = ({ navigation }) => {
+  const [isAuth, setIsAuth] = useAuthGlobal();
+  const [isPasswordSecured, setIsPasswordSecured] = useState(true);
   const [isLoadedAvatar, setIsLoadedAvatar] = useState(false);
   const [loadedAvatar, setLoadedAvatar] = useState(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const onChange = useCallback(() => {
-    const width = Dimensions.get("window").width;
-    setScreenWidth(width);
-  });
-
-  useEffect(() => {
-    Dimensions.addEventListener("change", onChange);
-    return () => {
-      Dimensions.removeEventListener("change", onChange);
-    };
-  }, []);
-
-  const keyboardHide = () => {
-    setIsShowKeyboard(false);
-    Keyboard.dismiss();
-  };
+  const { screenWidth, isShowKeyboard, hideKeyboard, showKeyboard } = useScreen();
 
   // -------------- Adding or removing Avatar ---------------
   const handleAddingAvatar = async () => {
@@ -64,78 +48,90 @@ export const RegistrationScreen = () => {
 
   // -------------- Submit registration --------------
   const handleSubmit = () => {
-    keyboardHide();
+    hideKeyboard();
     console.log(`name:${name}`);
     console.log(`email:${email}`);
     console.log(`password:${password}`);
-    console.log(`avatar:${loadedAvatar.uri}`);
+    console.log(`avatar:${loadedAvatar?.uri}`);
 
     setName("");
     setEmail("");
     setPassword("");
     setLoadedAvatar(null);
-    setPasswordSecure(true);
+    setIsPasswordSecured(true);
     setIsLoadedAvatar(false);
+    setIsAuth(true);
   };
 
   return (
-    <TouchableWithoutFeedback onPress={keyboardHide}>
-      <ImageBackground source={require("../assets/images/photo-bg.jpg")} style={styles.backgroundImage}>
-        <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : ""}>
-          <TouchableWithoutFeedback onPress={keyboardHide}>
-            <View style={{ ...styles.form, paddingBottom: isShowKeyboard ? 45 : 32, width: screenWidth }}>
-              <Text style={styles.title}>Registration</Text>
-              <Avatar
-                isLoadedAvatar={isLoadedAvatar}
-                loadedAvatar={loadedAvatar}
-                handleAddingAvatar={handleAddingAvatar}
-              />
-              <View style={styles.fieldsWrap}>
-                <Input
-                  textContentType="username"
-                  placeholder="Name"
-                  value={name}
-                  onChangeText={setName}
-                  showKeyboard={setIsShowKeyboard}
+    <View style={styles.container}>
+      <TouchableWithoutFeedback onPress={hideKeyboard}>
+        <ImageBackground source={require("../assets/images/photo-bg.jpg")} style={styles.backgroundImage}>
+          <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : ""}>
+            <TouchableWithoutFeedback onPress={hideKeyboard}>
+              <View style={{ ...styles.form, paddingBottom: isShowKeyboard ? 32 : 45, width: screenWidth }}>
+                <Text style={styles.title}>Registration</Text>
+                <Avatar
+                  isLoadedAvatar={isLoadedAvatar}
+                  loadedAvatar={loadedAvatar}
+                  handleAddingAvatar={handleAddingAvatar}
                 />
+                <View style={styles.fieldsWrap}>
+                  <Input
+                    textContentType="username"
+                    placeholder="Name"
+                    value={name}
+                    onChangeText={setName}
+                    showKeyboard={showKeyboard}
+                  />
 
-                <Input
-                  textContentType="emailAddress"
-                  placeholder="Email"
-                  value={email}
-                  onChangeText={setEmail}
-                  showKeyboard={setIsShowKeyboard}
-                />
+                  <Input
+                    textContentType="emailAddress"
+                    placeholder="Email"
+                    value={email}
+                    onChangeText={setEmail}
+                    showKeyboard={showKeyboard}
+                  />
 
-                <SecuredInput
-                  textContentType="password"
-                  placeholder="Password"
-                  value={password}
-                  onChangeText={setPassword}
-                  showKeyboard={setIsShowKeyboard}
-                  passwordSecure={passwordSecure}
-                  onPress={setPasswordSecure}
-                />
-              </View>
-              {!isShowKeyboard && (
-                <View>
-                  <TouchableOpacity style={styles.buttonSubmit} onPress={handleSubmit}>
-                    <Text style={styles.textButton}>Sign up</Text>
-                  </TouchableOpacity>
-                  <Text style={styles.text}>
-                    Have an account already? <Text style={styles.link}>Sign in</Text>
-                  </Text>
+                  <SecuredInput
+                    textContentType="password"
+                    placeholder="Password"
+                    value={password}
+                    onChangeText={setPassword}
+                    showKeyboard={showKeyboard}
+                    isPasswordSecured={isPasswordSecured}
+                    onPress={setIsPasswordSecured}
+                  />
                 </View>
-              )}
-            </View>
-          </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
-      </ImageBackground>
-    </TouchableWithoutFeedback>
+                {!isShowKeyboard && (
+                  <View>
+                    <TouchableOpacity style={styles.buttonSubmit} onPress={handleSubmit}>
+                      <Text style={styles.textButton}>Sign up</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.text}>
+                      Have an account already?{" "}
+                      <Text style={styles.link} onPress={() => navigation.navigate("Login")}>
+                        Sign in
+                      </Text>
+                    </Text>
+                  </View>
+                )}
+              </View>
+            </TouchableWithoutFeedback>
+          </KeyboardAvoidingView>
+        </ImageBackground>
+      </TouchableWithoutFeedback>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "green",
+
+    justifyContent: "center",
+  },
   backgroundImage: {
     flex: 1,
     resizeMode: "cover",
@@ -180,5 +176,7 @@ const styles = StyleSheet.create({
     color: "#1B4371",
     textAlign: "center",
   },
-  link: {},
+  link: {
+    color: "#FF6C00",
+  },
 });
