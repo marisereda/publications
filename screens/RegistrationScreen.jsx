@@ -1,6 +1,8 @@
 import { useState } from "react";
 import * as DocumentPicker from "expo-document-picker";
 import { useAuthGlobal } from "../globalStore";
+import { useUserGlobal } from "../globalStore";
+import { ButtonSubmit } from "../components/ButtonSubmit";
 
 import {
   StyleSheet,
@@ -19,6 +21,7 @@ import { useScreen } from "../hooks/useScreen";
 
 export const RegistrationScreen = ({ navigation }) => {
   const [isAuth, setIsAuth] = useAuthGlobal();
+  const [user, setUser] = useUserGlobal();
   const [isPasswordSecured, setIsPasswordSecured] = useState(true);
   const [isLoadedAvatar, setIsLoadedAvatar] = useState(false);
   const [loadedAvatar, setLoadedAvatar] = useState(null);
@@ -49,11 +52,13 @@ export const RegistrationScreen = ({ navigation }) => {
   // -------------- Submit registration --------------
   const handleSubmit = () => {
     hideKeyboard();
-    console.log(`name:${name}`);
-    console.log(`email:${email}`);
-    console.log(`password:${password}`);
-    console.log(`avatar:${loadedAvatar?.uri}`);
+    // console.log(`name:${name}`);
+    // console.log(`email:${email}`);
+    // console.log(`password:${password}`);
+    // console.log(`avatar:${loadedAvatar?.uri}`);
 
+    setUser({});
+    setUser({ name, email, loadedAvatar });
     setName("");
     setEmail("");
     setPassword("");
@@ -105,9 +110,10 @@ export const RegistrationScreen = ({ navigation }) => {
                 </View>
                 {!isShowKeyboard && (
                   <View>
-                    <TouchableOpacity style={styles.buttonSubmit} onPress={handleSubmit}>
+                    <ButtonSubmit text="Sign up" onPress={handleSubmit} />
+                    {/* <TouchableOpacity style={styles.buttonSubmit} onPress={handleSubmit}>
                       <Text style={styles.textButton}>Sign up</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     <Text style={styles.text}>
                       Have an account already?{" "}
                       <Text style={styles.link} onPress={() => navigation.navigate("Login")}>

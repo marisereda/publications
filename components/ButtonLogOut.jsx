@@ -1,27 +1,27 @@
 import { Feather } from "@expo/vector-icons";
 import { View } from "react-native";
-// import { useNavigation } from "@react-navigation/native";
-// import { useRoute } from "./Route";
 import { useAuthGlobal } from "../globalStore";
+import { useUserGlobal } from "../globalStore";
 
-{
-  /* <Feather name="arrow-left" size={24} color="black" /> */
-}
-
-export const ButtonLogOut = () => {
+export const ButtonLogOut = (props) => {
   const [isAuth, setIsAuth] = useAuthGlobal();
-  // const navigation = useNavigation();
-  // const routing = useRoute(false);
+  const [user, setUser] = useUserGlobal();
+
+  const handleLogOut = () => {
+    setIsAuth(false);
+    setUser({});
+  };
+
   return (
-    <View style={""}>
+    <View {...props}>
       <Feather.Button
         name="log-out"
         size={24}
         iconStyle={{ marginRight: 0 }}
-        color="#212121"
+        color="#BDBDBD"
         style={""}
         backgroundColor="transparent"
-        onPress={() => setIsAuth(false)}
+        onPress={handleLogOut}
       ></Feather.Button>
     </View>
   );

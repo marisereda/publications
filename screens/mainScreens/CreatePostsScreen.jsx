@@ -1,12 +1,14 @@
-import { View, Image, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { useState } from "react";
 import { Input } from "../../components/Input";
 import { InputLocation } from "../../components/InputLocation";
 import { useScreen } from "../../hooks/useScreen";
 import { ScreenWrap } from "../../components/ScreenWrap";
-import { ButtonDelete } from "../../components/ButtonDelete";
 import { PostedPhoto } from "../../components/PostedPhoto";
 import * as DocumentPicker from "expo-document-picker";
+import { AntDesign } from "@expo/vector-icons";
+import { ButtonIconOval } from "../../components/ButtonIconOval";
+import { ButtonSubmit } from "../../components/ButtonSubmit";
 
 export const CreatePostsScreen = () => {
   const [isLoadedPhoto, setIsLoadedPhoto] = useState(false);
@@ -15,37 +17,39 @@ export const CreatePostsScreen = () => {
   const [location, setLocation] = useState("");
   const { screenWidth, isShowKeyboard, hideKeyboard, showKeyboard } = useScreen();
 
-  const handleAddingPhoto = async () => {
-    if (!isLoadedPhoto) {
-      const res = await DocumentPicker.getDocumentAsync({
-        type: "image/*",
-        copyToCacheDirectory: true,
-      });
-
-      if (res.type !== "success") {
-        console.log("File picking failed");
-        return;
-      }
-      setLoadedPhoto(res);
-    } else if (isLoadedPhoto) {
-      setLoadedPhoto(null);
+  const handleAddPhoto = async () => {
+    const res = await DocumentPicker.getDocumentAsync({
+      type: "image/*",
+      copyToCacheDirectory: true,
+    });
+    if (res.type !== "success") {
+      console.log("File picking failed");
+      return;
     }
-    setIsLoadedPhoto(!isLoadedPhoto);
+    setLoadedPhoto(res);
+    setIsLoadedPhoto(true);
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    setIsLoadedPhoto(false);
+    setLoadedPhoto("");
+    setTitle("");
+    setLocation("");
+  };
+  const handleDeletePost = () => {
+    setIsLoadedPhoto(false);
+    setLoadedPhoto("");
+    setTitle("");
+    setLocation("");
+  };
 
   return (
-    <ScreenWrap>
+    <ScreenWrap hideKeyboard={hideKeyboard}>
       <View style={styles.container}>
-        {/* <Image
-          style={styles.photo}
-          // source={"https://drive.google.com/file/d/1hUgV0C6hVGOA4cKiMGw6FIuolIvqliif/view?usp=sharing"}
-          // src={postItem.photo}
-          src={"https://drive.google.com/file/d/1hUgV0C6hVGOA4cKiMGw6FIuolIvqliif/view?usp=sharing"}
-        /> */}
-        <PostedPhoto isLoadedPhoto={isLoadedPhoto} loadedPhoto={loadedPhoto} handleAddingPhoto={handleAddingPhoto} />
-        <Text style={styles.title}>{isLoadedPhoto ? "Edit photo" : "Download photo"}</Text>
+        <PostedPhoto isLoadedPhoto={isLoadedPhoto} loadedPhoto={loadedPhoto} handleAddPhoto={handleAddPhoto} />
+        <Text style={styles.title} onPress={handleAddPhoto}>
+          {isLoadedPhoto ? "Edit photo" : "Download photo"}
+        </Text>
         <View style={styles.form}>
           <Input
             variant="flushed"
@@ -66,13 +70,13 @@ export const CreatePostsScreen = () => {
         </View>
         {!isShowKeyboard && (
           <View>
-            <TouchableOpacity
-              style={{ ...styles.buttonSubmit, backgroundColor: isLoadedPhoto ? "#FF6C00" : "#F6F6F6" }}
-              onPress={handleSubmit}
-            >
-              <Text style={{ ...styles.textButton, color: isLoadedPhoto ? "#fff" : "#BDBDBD" }}>Post</Text>
-            </TouchableOpacity>
-            <ButtonDelete isDisabled={isLoadedPhoto ? false : true} />
+            <ButtonSubmit text="Post" disabled={!isLoadedPhoto} onPress={handleSubmit} />
+            <ButtonIconOval
+              icon={AntDesign}
+              iconProps={{ name: "delete" }}
+              disabled={!isLoadedPhoto}
+              onPress={handleDeletePost}
+            />
           </View>
         )}
       </View>
@@ -81,20 +85,6 @@ export const CreatePostsScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    // flex: 1,
-    // paddingHorizontal: 16,
-    // paddingVertical: 32,
-    // backgroundColor: "#fff",
-  },
-
-  // photo: {
-  //   width: "100%",
-  //   height: 240,
-  //   borderRadius: 8,
-  //   backgroundColor: "#F6F6F6",
-  //   marginBottom: 8,
-  // },
   title: {
     fontFamily: "Roboto-Regular",
     fontSize: 16,
@@ -106,15 +96,15 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   buttonSubmit: {
+    padding: 16,
     marginTop: 40,
     marginBottom: 120,
     alignItems: "center",
-    // backgroundColor: "#FF6C00",
     borderRadius: 50,
   },
   textButton: {
-    paddingTop: 16,
-    paddingBottom: 16,
+    pAddTop: 16,
+    pAddBottom: 16,
     fontFamily: "Roboto-Regular",
     fontSize: 16,
     // color: "#fff",

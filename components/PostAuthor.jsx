@@ -1,12 +1,12 @@
 import { View, Image, Text, StyleSheet } from "react-native";
 
-export const PostAuthor = ({ user }) => {
+export const PostAuthor = ({ avatar, name, email }) => {
   return (
     <View style={styles.postWrap}>
-      <Image src={user.avatar} style={styles.avatar} />
+      <Image src={avatar?.uri} style={styles.avatar} />
       <View style={styles.textWrap}>
-        <Text style={styles.name}>{user.name}</Text>
-        <Text style={styles.email}>{user.email}</Text>
+        <Text style={styles.name}>{name}</Text>
+        <Text style={styles.email}>{email}</Text>
       </View>
     </View>
   );
@@ -22,11 +22,10 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 16,
-    // backgroundColor: "green",
 
     backgroundColor: "#F6F6F6",
     borderWidth: 1,
-    borderColor: "#000",
+    borderColor: "#BDBDBD",
     // shadow: "#000",
   },
   textWrap: {

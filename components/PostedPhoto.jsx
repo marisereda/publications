@@ -1,21 +1,20 @@
 import { View, Image, StyleSheet } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { ButtonIconRound } from "./ButtoIconRound";
 
-export const PostedPhoto = ({ isLoadedPhoto, loadedPhoto, handleAddingPhoto }) => {
+export const PostedPhoto = ({ isLoadedPhoto, loadedPhoto, handleAddPhoto }) => {
   console.log(isLoadedPhoto);
+
   return (
     <View style={styles.avatarWrap}>
       <Image src={loadedPhoto ? loadedPhoto.uri : ""} style={styles.photo} />
       <View style={{ ...styles.addButtonWrap, backgroundColor: isLoadedPhoto ? "rgba(255, 255, 255, 0.3)" : "#fff" }}>
-        <FontAwesome5.Button
-          name="camera"
-          size={24}
-          iconStyle={{ marginRight: 0 }}
-          color={isLoadedPhoto ? "#fff" : "#BDBDBD"}
-          style={styles.iconButtonAdd}
-          backgroundColor="transparent"
-          onPress={handleAddingPhoto}
-        ></FontAwesome5.Button>
+        <ButtonIconRound
+          icon={FontAwesome5}
+          iconProps={{ name: "camera" }}
+          transparent={isLoadedPhoto}
+          onPress={handleAddPhoto}
+        />
       </View>
     </View>
   );

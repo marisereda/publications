@@ -24,7 +24,7 @@ export const useScreen = () => {
   const showKeyboard = () => {
     setIsShowKeyboard(true);
   };
-
+  console.log("Use Screen isShowKeyboard:", isShowKeyboard);
   return {
     screenWidth,
     isShowKeyboard,

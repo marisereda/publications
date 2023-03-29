@@ -11,7 +11,6 @@ import { IconUser } from "./IconUser";
 import { IconAdd } from "./IconAdd";
 import { ButtonGoBack } from "./ButtonGoBack";
 import { ButtonLogOut } from "./ButtonLogOut";
-import { TabBar } from "./ButtonDelete";
 
 const AuthStack = createNativeStackNavigator();
 const MainTab = createBottomTabNavigator();
@@ -55,6 +54,7 @@ export const Route = ({ isAuth }) => {
         name="Profile"
         options={{
           tabBarIcon: ({ focused, color, size }) => <IconUser focused={focused} />,
+          headerShown: false,
         }}
         component={ProfileScreen}
       />

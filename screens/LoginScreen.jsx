@@ -13,10 +13,15 @@ import {
 import { Input } from "../components/Input";
 import { SecuredInput } from "../components/SecuredInput";
 import { useAuthGlobal } from "../globalStore";
+import { useUserGlobal } from "../globalStore";
+
 import { useScreen } from "../hooks/useScreen";
+import { ButtonSubmit } from "../components/ButtonSubmit";
 
 export const LoginScreen = ({ navigation }) => {
   const [isAuth, setIsAuth] = useAuthGlobal();
+  const [user, setUser] = useAuthGlobal();
+
   const [passwordSecure, setPasswordSecure] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,8 +30,10 @@ export const LoginScreen = ({ navigation }) => {
   // -------------- Submit enter --------------
   const handleSubmit = () => {
     hideKeyboard();
-    console.log(`email:${email}`);
-    console.log(`password:${password}`);
+    // console.log(`email:${email}`);
+    // console.log(`password:${password}`);
+    setUser({});
+    setUser({ email });
     setEmail("");
     setPassword("");
     setPasswordSecure(true);

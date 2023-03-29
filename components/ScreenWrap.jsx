@@ -1,8 +1,8 @@
 import { View, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, StyleSheet } from "react-native";
-import { useScreen } from "../hooks/useScreen";
+// import { useScreen } from "../hooks/useScreen";
 
-export const ScreenWrap = ({ children }) => {
-  const { screenWidth, isShowKeyboard, hideKeyboard, showKeyboard } = useScreen();
+export const ScreenWrap = ({ hideKeyboard, children }) => {
+  // const { screenWidth, isShowKeyboard, hideKeyboard, showKeyboard } = useScreen();
 
   return (
     <View style={styles.container}>
