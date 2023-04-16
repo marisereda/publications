@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
-export const ButtonComments = ({ commentsAmount }) => {
+export const ButtonComments = ({ commentsAmount, onPress }) => {
   return (
     <View style={styles.button}>
       <MaterialIcons.Button
@@ -11,7 +11,7 @@ export const ButtonComments = ({ commentsAmount }) => {
         color="#FF6C00"
         style={""}
         backgroundColor="transparent"
-        // onPress={() => navigation.goBack()}
+        onPress={onPress}
       >
         <Text style={styles.text}>{commentsAmount}</Text>
       </MaterialIcons.Button>

@@ -58,6 +58,17 @@ export const Route = ({ isAuth }) => {
         }}
         component={ProfileScreen}
       />
+      <MainTab.Screen
+        name="Comments"
+        options={{
+          tabBarIconStyle: { display: "none" },
+          tabBarLabelStyle: { display: "none" },
+          headerLeft: () => <ButtonGoBack />,
+          tabBarStyle: { display: "none" },
+          tabBarHideOnKeyboard: true,
+        }}
+        component={CommentsScreen}
+      />
     </MainTab.Navigator>
   );
 };

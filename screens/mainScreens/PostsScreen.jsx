@@ -29,16 +29,18 @@ const posts = [
     location: "Italy",
   },
 ];
-export const PostsScreen = () => {
+export const PostsScreen = ({ navigation }) => {
   const [user, setUser] = useUserGlobal();
-  console.log("🚀 ~ PostsScreen ~ user:", user);
 
+  const handleNavigate = () => {
+    navigation.navigate("Comments");
+  };
   return (
     <View style={styles.container}>
       <PostAuthor avatar={user?.loadedAvatar ? user.loadedAvatar : ""} name={user?.name} email={user?.email} />
       <FlatList
         data={posts}
-        renderItem={({ item }) => <PostListItem postItem={item} />}
+        renderItem={({ item }) => <PostListItem postItem={item} onPress={handleNavigate} />}
         keyExtractor={({ id }) => id}
       />
     </View>
@@ -51,7 +53,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 32,
     backgroundColor: "#fff",
-    // backgroundColor: "green",
-    // justifyContent: "center",
   },
 });

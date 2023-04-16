@@ -64,4 +64,13 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     borderColor: "#E8E8E8",
   },
+  roundOutline: {
+    padding: 16,
+    fontFamily: "Roboto-Regular",
+    fontSize: 16,
+    borderWidth: 1,
+    borderRadius: 50,
+    backgroundColor: "#F6F6F6",
+    borderColor: "#E8E8E8",
+  },
 });

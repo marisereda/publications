@@ -45,7 +45,7 @@ export const CreatePostsScreen = () => {
 
   return (
     <ScreenWrap hideKeyboard={hideKeyboard}>
-      <View style={styles.container}>
+      <View>
         <PostedPhoto isLoadedPhoto={isLoadedPhoto} loadedPhoto={loadedPhoto} handleAddPhoto={handleAddPhoto} />
         <Text style={styles.title} onPress={handleAddPhoto}>
           {isLoadedPhoto ? "Edit photo" : "Download photo"}

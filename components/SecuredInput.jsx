@@ -39,8 +39,6 @@ export const SecuredInput = ({
 const styles = StyleSheet.create({
   passwordWrap: {
     position: "absolute",
-    // alignItems: "flex-end",
-    // justifyContent: "center",
     top: 0,
     right: 0,
     height: "100%",

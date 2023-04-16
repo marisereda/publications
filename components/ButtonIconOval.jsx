@@ -1,17 +1,18 @@
 import { TouchableOpacity, StyleSheet } from "react-native";
 
-export const ButtonIconOval = ({ onPress, icon: Icon, iconProps, disabled = "false" }) => {
+export const ButtonIconOval = ({ onPress, icon: Icon, iconProps, disabled = "false", variant = "oval", ...rest }) => {
   // console.log("disabled", disabled, opaciable);
   return (
-    <TouchableOpacity style={getButtonStyle(disabled)} onPress={onPress}>
+    <TouchableOpacity style={{ ...getButtonStyle(disabled, variant), ...rest }} onPress={onPress}>
       <Icon {...iconProps} size={24} color={disabled ? "#BDBDBD" : "#fff"} />
     </TouchableOpacity>
   );
 };
 
-const getButtonStyle = (disabled) => {
+const getButtonStyle = (disabled, variant) => {
   const disabledStyle = disabled ? styles.disabled : {};
-  return { ...styles.button, ...disabledStyle };
+  const roundStyle = variant === "round" ? styles.round : {};
+  return { ...styles.button, ...disabledStyle, ...roundStyle };
 };
 
 const styles = StyleSheet.create({
@@ -23,6 +24,11 @@ const styles = StyleSheet.create({
     width: 70,
     backgroundColor: "#FF6C00",
     borderRadius: 50,
+  },
+
+  round: {
+    height: 44,
+    width: 44,
   },
 
   disabled: {

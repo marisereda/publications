@@ -2,8 +2,8 @@ import { View, Image, Text, StyleSheet } from "react-native";
 import { ButtonComments } from "./ButtonComments";
 import { ButtonLikes } from "./ButtonLikes";
 import { ButtonLocation } from "./ButtonLocation";
-export const PostListItem = ({ postItem }) => {
-  // console.log(postItem.photo);
+
+export const PostListItem = ({ postItem, onPress }) => {
   return (
     <View style={styles.postWrap}>
       <Image
@@ -14,7 +14,7 @@ export const PostListItem = ({ postItem }) => {
       />
       <Text style={styles.title}>{postItem.title}</Text>
       <View style={styles.buttonsWrap}>
-        <ButtonComments commentsAmount={postItem.commentsAmount} />
+        <ButtonComments commentsAmount={postItem.commentsAmount} onPress={onPress} />
         <ButtonLikes likesAmount={postItem.likesAmount} />
         <ButtonLocation location={postItem.location} />
       </View>

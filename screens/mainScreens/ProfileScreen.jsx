@@ -35,7 +35,7 @@ const posts = [
   },
 ];
 
-export const ProfileScreen = () => {
+export const ProfileScreen = ({ navigation }) => {
   const { screenWidth, isShowKeyboard, hideKeyboard, showKeyboard } = useScreen();
   const [user, setUser] = useUserGlobal();
   const [isLoadedAvatar, setIsLoadedAvatar] = useState(user?.loadedAvatar ? true : false);
@@ -68,7 +68,7 @@ export const ProfileScreen = () => {
         <Text style={styles.title}>{user?.name ? user.name : user.email}</Text>
         <FlatList
           data={posts}
-          renderItem={({ item }) => <PostListItem postItem={item} />}
+          renderItem={({ item }) => <PostListItem postItem={item} onPress={() => navigation.navigate("Comments")} />}
           keyExtractor={({ id }) => id}
         />
       </View>
