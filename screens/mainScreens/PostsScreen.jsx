@@ -6,7 +6,7 @@ import { useUserGlobal } from "../../globalStore";
 const posts = [
   {
     id: "1",
-    photo: "https://drive.google.com/file/d/1hUgV0C6hVGOA4cKiMGw6FIuolIvqliif/view?usp=sharing",
+    photo: "https://res.cloudinary.com/diaxwbc3c/image/upload/v1681745149/cld-sample-2.jpg",
     title: "Forest",
     commentsAmount: "8",
     likesAmount: "42",
@@ -14,7 +14,7 @@ const posts = [
   },
   {
     id: "2",
-    photo: "https://drive.google.com/file/d/1hWikkNzKyFe_DY2I4S0bAi0JjDiYaXoY/view?usp=sharing",
+    photo: "https://res.cloudinary.com/diaxwbc3c/image/upload/v1681745149/cld-sample-2.jpg",
     title: "Black Sea Sunset",
     commentsAmount: "4",
     likesAmount: "37",
@@ -22,7 +22,7 @@ const posts = [
   },
   {
     id: "3",
-    photo: "https://drive.google.com/file/d/1hV5ayRKTqEbLU9Hg73XcLwgcY2ivs1PP/view?usp=sharing",
+    photo: "https://res.cloudinary.com/diaxwbc3c/image/upload/v1681745149/cld-sample-2.jpg",
     title: "Venice house",
     commentsAmount: "5",
     likesAmount: "58",
@@ -32,8 +32,8 @@ const posts = [
 export const PostsScreen = ({ navigation }) => {
   const [user, setUser] = useUserGlobal();
 
-  const handleNavigate = () => {
-    navigation.navigate("Comments");
+  const handleNavigate = (postItem) => {
+    navigation.navigate("Comments", postItem);
   };
   return (
     <View style={styles.container}>

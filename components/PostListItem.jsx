@@ -6,15 +6,10 @@ import { ButtonLocation } from "./ButtonLocation";
 export const PostListItem = ({ postItem, onPress }) => {
   return (
     <View style={styles.postWrap}>
-      <Image
-        style={styles.photo}
-        // source={"https://drive.google.com/file/d/1hUgV0C6hVGOA4cKiMGw6FIuolIvqliif/view?usp=sharing"}
-        // src={postItem.photo}
-        src={"https://drive.google.com/file/d/1hUgV0C6hVGOA4cKiMGw6FIuolIvqliif/view?usp=sharing"}
-      />
+      <Image style={styles.photo} source={{ uri: postItem.photo }} />
       <Text style={styles.title}>{postItem.title}</Text>
       <View style={styles.buttonsWrap}>
-        <ButtonComments commentsAmount={postItem.commentsAmount} onPress={onPress} />
+        <ButtonComments commentsAmount={postItem.commentsAmount} onPress={() => onPress(postItem)} />
         <ButtonLikes likesAmount={postItem.likesAmount} />
         <ButtonLocation location={postItem.location} />
       </View>
@@ -24,8 +19,6 @@ export const PostListItem = ({ postItem, onPress }) => {
 
 const styles = StyleSheet.create({
   postWrap: {
-    // flSex: 1,
-    // flexDirection: "row",
     gap: 8,
     marginBottom: 32,
   },
@@ -42,10 +35,7 @@ const styles = StyleSheet.create({
   buttonsWrap: {
     flex: 1,
     flexDirection: "row",
-    // gap: 0,
     alignItems: "center",
     justifyContent: "flex-start",
-    // borderWidth: 1,
-    // borderColor: "green",
   },
 });

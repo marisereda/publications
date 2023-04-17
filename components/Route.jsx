@@ -13,17 +13,10 @@ import { ButtonGoBack } from "./ButtonGoBack";
 import { ButtonLogOut } from "./ButtonLogOut";
 
 const AuthStack = createNativeStackNavigator();
+const PrivateStack = createNativeStackNavigator();
 const MainTab = createBottomTabNavigator();
 
-export const Route = ({ isAuth }) => {
-  if (!isAuth) {
-    return (
-      <AuthStack.Navigator>
-        <AuthStack.Screen options={{ headerShown: false }} name="Register" component={RegistrationScreen} />
-        <AuthStack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
-      </AuthStack.Navigator>
-    );
-  }
+const BottomTabs = () => {
   return (
     <MainTab.Navigator
       screenOptions={{
@@ -58,17 +51,29 @@ export const Route = ({ isAuth }) => {
         }}
         component={ProfileScreen}
       />
-      <MainTab.Screen
+    </MainTab.Navigator>
+  );
+};
+
+export const Route = ({ isAuth }) => {
+  if (!isAuth) {
+    return (
+      <AuthStack.Navigator>
+        <AuthStack.Screen options={{ headerShown: false }} name="Register" component={RegistrationScreen} />
+        <AuthStack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
+      </AuthStack.Navigator>
+    );
+  }
+  return (
+    <PrivateStack.Navigator>
+      <PrivateStack.Screen name="BottomTabs" options={{ headerShown: false }} component={BottomTabs} />
+      <PrivateStack.Screen
         name="Comments"
         options={{
-          tabBarIconStyle: { display: "none" },
-          tabBarLabelStyle: { display: "none" },
           headerLeft: () => <ButtonGoBack />,
-          tabBarStyle: { display: "none" },
-          tabBarHideOnKeyboard: true,
         }}
         component={CommentsScreen}
       />
-    </MainTab.Navigator>
+    </PrivateStack.Navigator>
   );
 };
