@@ -1,54 +1,124 @@
-import { View, Text, StyleSheet } from "react-native";
-import { useState } from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { Camera, CameraType } from "expo-camera";
+import { useState, useEffect, useRef } from "react";
 import { Input } from "../../components/Input";
 import { InputLocation } from "../../components/InputLocation";
 import { useScreen } from "../../hooks/useScreen";
 import { ScreenWrap } from "../../components/ScreenWrap";
 import { PostedPhoto } from "../../components/PostedPhoto";
-import * as DocumentPicker from "expo-document-picker";
 import { AntDesign } from "@expo/vector-icons";
 import { ButtonIconOval } from "../../components/ButtonIconOval";
 import { ButtonSubmit } from "../../components/ButtonSubmit";
+import { MaterialIcons } from "@expo/vector-icons";
+import * as MediaLibrary from "expo-media-library";
+import * as DocumentPicker from "expo-document-picker";
 
 export const CreatePostsScreen = () => {
-  const [isLoadedPhoto, setIsLoadedPhoto] = useState(false);
   const [loadedPhoto, setLoadedPhoto] = useState("");
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
   const { screenWidth, isShowKeyboard, hideKeyboard, showKeyboard } = useScreen();
 
+  const [type, setType] = useState(CameraType.back);
+  const [camPermission, requestCamPermission] = Camera.useCameraPermissions();
+  const [mediaPermission, requestMediaPermission] = MediaLibrary.usePermissions();
+
+  const [isCameraReady, setIsCameraReady] = useState(false);
+  const [isCameraTurnOn, setIsCameraTurnOn] = useState(false);
+
+  const ref = useRef();
+
+  useEffect(() => {
+    (async () => {
+      await requestCamPermission();
+      await requestMediaPermission();
+    })();
+  }, []);
+
+  if (!camPermission) {
+    return <View />;
+  }
+  if (!camPermission.granted) {
+    return (
+      <View style={styles.noAccessMessage}>
+        <Text style={{ fontSize: 16 }}>No access to camera</Text>
+      </View>
+    );
+  }
+
   const handleAddPhoto = async () => {
+    setIsCameraTurnOn(true);
+  };
+
+  const toggleCameraType = () => {
+    setType((current) => (current === CameraType.back ? CameraType.front : CameraType.back));
+  };
+
+  const takePhoto = async () => {
+    if (isCameraReady) {
+      try {
+        const { uri } = await ref.current.takePictureAsync();
+        setLoadedPhoto(uri);
+        if (mediaPermission.granted) {
+          await MediaLibrary.createAssetAsync(uri);
+        }
+        setIsCameraTurnOn(false);
+      } catch (error) {
+        return (
+          <View style={styles.noAccessMessage}>
+            <Text style={{ fontSize: 16 }}>error</Text>
+          </View>
+        );
+      }
+    }
+  };
+
+  const handleDownloadPhoto = async () => {
     const res = await DocumentPicker.getDocumentAsync({
       type: "image/*",
       copyToCacheDirectory: true,
     });
     if (res.type !== "success") {
-      console.log("File picking failed");
       return;
     }
-    setLoadedPhoto(res);
-    setIsLoadedPhoto(true);
+    setLoadedPhoto(res.uri);
   };
 
   const handleSubmit = () => {
-    setIsLoadedPhoto(false);
     setLoadedPhoto("");
     setTitle("");
     setLocation("");
   };
   const handleDeletePost = () => {
-    setIsLoadedPhoto(false);
     setLoadedPhoto("");
     setTitle("");
     setLocation("");
   };
+  // --------------------------- Render Camera  -----------------------------
+  if (isCameraTurnOn) {
+    return (
+      <Camera style={styles.camera} type={type} ref={ref} onCameraReady={() => setIsCameraReady(true)}>
+        <View style={styles.buttonSnapContainer}>
+          <TouchableOpacity style={styles.button} onPress={takePhoto}>
+            <MaterialIcons name="camera" size={24} color="#fff" />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.buttonToggleContainer}>
+          <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
+            <MaterialIcons name="flip-camera-android" size={24} color="#fff" />
+          </TouchableOpacity>
+        </View>
+      </Camera>
+    );
+  }
 
+  // ----------------------- Render Create Post ---------------------------
   return (
     <ScreenWrap hideKeyboard={hideKeyboard}>
       <View>
-        <PostedPhoto isLoadedPhoto={isLoadedPhoto} loadedPhoto={loadedPhoto} handleAddPhoto={handleAddPhoto} />
-        <Text style={styles.title} onPress={handleAddPhoto}>
-          {isLoadedPhoto ? "Edit photo" : "Download photo"}
+        <PostedPhoto isLoadedPhoto={Boolean(loadedPhoto)} loadedPhoto={loadedPhoto} handleAddPhoto={handleAddPhoto} />
+        <Text style={styles.title} onPress={handleDownloadPhoto}>
+          {Boolean(loadedPhoto) ? "Edit photo" : "Download photo"}
         </Text>
         <View style={styles.form}>
           <Input
@@ -70,11 +140,11 @@ export const CreatePostsScreen = () => {
         </View>
         {!isShowKeyboard && (
           <View>
-            <ButtonSubmit text="Post" disabled={!isLoadedPhoto} onPress={handleSubmit} />
+            <ButtonSubmit text="Post" disabled={!Boolean(loadedPhoto)} onPress={handleSubmit} />
             <ButtonIconOval
               icon={AntDesign}
               iconProps={{ name: "delete" }}
-              disabled={!isLoadedPhoto}
+              disabled={!Boolean(loadedPhoto)}
               onPress={handleDeletePost}
             />
           </View>
@@ -84,7 +154,43 @@ export const CreatePostsScreen = () => {
   );
 };
 
+// ------------------------- Styles ---------------------------
 const styles = StyleSheet.create({
+  noAccessMessage: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  camera: {
+    flex: 1,
+  },
+  buttonSnapContainer: {
+    position: "absolute",
+    height: 60,
+    width: 60,
+    bottom: 20,
+    right: "50%",
+    transform: [{ translateX: 30 }],
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.3)",
+    borderRadius: 50,
+  },
+  buttonToggleContainer: {
+    position: "absolute",
+    height: 60,
+    width: 60,
+    bottom: 20,
+    right: 20,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.3)",
+    borderRadius: 50,
+    // borderWidth: 1,
+    // borderColor: "green",
+  },
   title: {
     fontFamily: "Roboto-Regular",
     fontSize: 16,

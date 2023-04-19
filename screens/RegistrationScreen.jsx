@@ -39,7 +39,6 @@ export const RegistrationScreen = ({ navigation }) => {
       });
 
       if (res.type !== "success") {
-        console.log("File picking failed");
         return;
       }
       setLoadedAvatar(res);
