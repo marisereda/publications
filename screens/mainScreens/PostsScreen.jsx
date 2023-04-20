@@ -32,15 +32,26 @@ const posts = [
 export const PostsScreen = ({ navigation }) => {
   const [user, setUser] = useUserGlobal();
 
-  const handleNavigate = (postItem) => {
+  const handleNavigateComments = (postItem) => {
     navigation.navigate("Comments", postItem);
   };
+
+  const handleNavigateLocation = (postItem) => {
+    navigation.navigate("Map", postItem);
+  };
+
   return (
     <View style={styles.container}>
       <PostAuthor avatar={user?.loadedAvatar ? user.loadedAvatar : ""} name={user?.name} email={user?.email} />
       <FlatList
         data={posts}
-        renderItem={({ item }) => <PostListItem postItem={item} onPress={handleNavigate} />}
+        renderItem={({ item }) => (
+          <PostListItem
+            postItem={item}
+            onPressComments={handleNavigateComments}
+            onPressLocation={handleNavigateLocation}
+          />
+        )}
         keyExtractor={({ id }) => id}
       />
     </View>

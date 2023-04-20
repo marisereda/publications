@@ -12,13 +12,15 @@ import { ButtonSubmit } from "../../components/ButtonSubmit";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as MediaLibrary from "expo-media-library";
 import * as DocumentPicker from "expo-document-picker";
+import * as Location from "expo-location";
 
-export const CreatePostsScreen = () => {
+export const CreatePostsScreen = ({ navigation }) => {
   const [loadedPhoto, setLoadedPhoto] = useState("");
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
   const { screenWidth, isShowKeyboard, hideKeyboard, showKeyboard } = useScreen();
 
+  const [coordsLocation, setCoordsLocation] = useState(null);
   const [type, setType] = useState(CameraType.back);
   const [camPermission, requestCamPermission] = Camera.useCameraPermissions();
   const [mediaPermission, requestMediaPermission] = MediaLibrary.usePermissions();
@@ -32,6 +34,14 @@ export const CreatePostsScreen = () => {
     (async () => {
       await requestCamPermission();
       await requestMediaPermission();
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        return (
+          <View style={styles.noAccessMessage}>
+            <Text style={{ fontSize: 16 }}>Permission to access location was denied</Text>
+          </View>
+        );
+      }
     })();
   }, []);
 
@@ -84,10 +94,18 @@ export const CreatePostsScreen = () => {
     setLoadedPhoto(res.uri);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    if (!Boolean(loadedPhoto)) {
+      return;
+    }
+    let location = await Location.getCurrentPositionAsync({});
+    // console.log("🚧 location:", location);
+
+    setCoordsLocation(location);
     setLoadedPhoto("");
     setTitle("");
     setLocation("");
+    navigation.navigate("Posts");
   };
   const handleDeletePost = () => {
     setLoadedPhoto("");
@@ -139,7 +157,7 @@ export const CreatePostsScreen = () => {
           />
         </View>
         {!isShowKeyboard && (
-          <View>
+          <View style={styles.buttonsWrap}>
             <ButtonSubmit text="Post" disabled={!Boolean(loadedPhoto)} onPress={handleSubmit} />
             <ButtonIconOval
               icon={AntDesign}
@@ -201,9 +219,16 @@ const styles = StyleSheet.create({
     gap: 16,
     marginBottom: 32,
   },
+  buttonsWrap: {
+    // justifyContent: "flex-end",
+    // alignSelf: "stretch",
+    // borderWidth: 1,
+    // borderColor: "green",
+  },
+
   buttonSubmit: {
     padding: 16,
-    marginTop: 40,
+    marginTop: 0,
     marginBottom: 120,
     alignItems: "center",
     borderRadius: 50,

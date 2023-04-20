@@ -3,15 +3,17 @@ import { ButtonComments } from "./ButtonComments";
 import { ButtonLikes } from "./ButtonLikes";
 import { ButtonLocation } from "./ButtonLocation";
 
-export const PostListItem = ({ postItem, onPress }) => {
+export const PostListItem = ({ postItem, onPressComments, onPressLocation }) => {
+  // console.log("🚧 onPressLocation:", onPressLocation);
+
   return (
     <View style={styles.postWrap}>
-      <Image style={styles.photo} source={{ uri: postItem.photo }} />
+      <Image style={styles.photo} source={{ uri: postItem?.photo }} />
       <Text style={styles.title}>{postItem.title}</Text>
       <View style={styles.buttonsWrap}>
-        <ButtonComments commentsAmount={postItem.commentsAmount} onPress={() => onPress(postItem)} />
+        <ButtonComments commentsAmount={postItem.commentsAmount} onPress={() => onPressComments(postItem)} />
         <ButtonLikes likesAmount={postItem.likesAmount} />
-        <ButtonLocation location={postItem.location} />
+        <ButtonLocation location={postItem.location} onPress={() => onPressLocation(postItem)} />
       </View>
     </View>
   );

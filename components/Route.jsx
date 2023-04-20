@@ -6,6 +6,7 @@ import { CommentsScreen } from "../screens/mainScreens/CommentsScreen";
 import { CreatePostsScreen } from "../screens/mainScreens/CreatePostsScreen";
 import { PostsScreen } from "../screens/mainScreens/PostsScreen";
 import { ProfileScreen } from "../screens/mainScreens/ProfileScreen";
+import { MapScreen } from "../screens/mainScreens/MapScreen";
 import { IconList } from "./IconList";
 import { IconUser } from "./IconUser";
 import { IconAdd } from "./IconAdd";
@@ -73,6 +74,13 @@ export const Route = ({ isAuth }) => {
           headerLeft: () => <ButtonGoBack />,
         }}
         component={CommentsScreen}
+      />
+      <PrivateStack.Screen
+        name="Map"
+        options={{
+          headerLeft: () => <ButtonGoBack />,
+        }}
+        component={MapScreen}
       />
     </PrivateStack.Navigator>
   );

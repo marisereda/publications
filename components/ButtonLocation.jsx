@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-export const ButtonLocation = ({ location }) => {
+export const ButtonLocation = ({ location, onPress }) => {
   return (
     <View style={styles.button}>
       <Ionicons.Button
@@ -10,7 +10,7 @@ export const ButtonLocation = ({ location }) => {
         color="#BDBDBD"
         style={""}
         backgroundColor="transparent"
-        // onPress={() => navigation.goBack()}
+        onPress={onPress}
       >
         <Text style={styles.text}>{location}</Text>
       </Ionicons.Button>

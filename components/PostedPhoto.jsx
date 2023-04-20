@@ -7,7 +7,7 @@ export const PostedPhoto = ({ isLoadedPhoto, loadedPhoto, handleAddPhoto }) => {
 
   return (
     <View style={styles.avatarWrap}>
-      <Image source={{ uri: loadedPhoto ? loadedPhoto : "" }} style={styles.photo} />
+      <Image source={{ uri: loadedPhoto }} style={styles.photo} />
       <View style={{ ...styles.addButtonWrap, backgroundColor: isLoadedPhoto ? "rgba(255, 255, 255, 0.3)" : "#fff" }}>
         <ButtonIconRound
           icon={FontAwesome5}
