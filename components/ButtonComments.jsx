@@ -1,7 +1,7 @@
-import { View, Text, StyleSheet } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { View, Text, StyleSheet } from "react-native";
 
-export const ButtonComments = ({ commentsAmount, onPress }) => {
+export const ButtonComments = ({ postItem, onPress }) => {
   return (
     <View style={styles.button}>
       <MaterialIcons.Button
@@ -9,16 +9,18 @@ export const ButtonComments = ({ commentsAmount, onPress }) => {
         size={24}
         iconStyle={{ marginRight: 6 }}
         color="#FF6C00"
-        style={""}
+        style=""
         backgroundColor="transparent"
         onPress={onPress}
       >
-        <Text style={styles.text}>{commentsAmount}</Text>
+        <Text style={styles.text}>{postItem.comments.length}</Text>
       </MaterialIcons.Button>
     </View>
   );
 };
 
+// ******************** Styles ********************
+// *
 const styles = StyleSheet.create({
   button: {
     marginRight: 24,

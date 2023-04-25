@@ -1,24 +1,16 @@
-import { Text, View, StyleSheet, Dimensions } from "react-native";
-
+import { View, StyleSheet } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
-const region = {
-  latitude: 37.78825,
-  longitude: -122.4324,
-  latitudeDelta: 0.0922,
-  longitudeDelta: 0.0421,
-};
+export const MapScreen = ({ route }) => {
+  const postItem = route.params;
 
-const markers = [
-  {
-    title: "I am here",
-    latitude: 37.78825,
-    longitude: -122.4324,
-    description: "Hello",
-  },
-];
+  const region = {
+    latitude: postItem?.location.latitude,
+    longitude: postItem?.location.longitude,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  };
 
-export const MapScreen = () => {
   return (
     <View style={styles.container}>
       <MapView
@@ -26,15 +18,15 @@ export const MapScreen = () => {
         region={region}
         mapType="standard"
         minZoomLevel={15}
-        // onMapReady={() => console.log("Map is ready")}
-        // onRegionChange={() => console.log("Region change")}
       >
-        <Marker title="I am here" coordinate={{ latitude: 37.78825, longitude: -122.4324 }} description="Hello" />
+        <Marker title={postItem.title} coordinate={region} description="" />
       </MapView>
     </View>
   );
 };
 
+// ******************** Styles ********************
+// *
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -42,7 +34,5 @@ const styles = StyleSheet.create({
   map: {
     width: "100%",
     height: "100%",
-    // width: Dimensions.get("window").width,
-    // height: Dimensions.get("window").height
   },
 });

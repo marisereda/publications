@@ -1,10 +1,17 @@
-import { View, Image, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { View, Image, StyleSheet } from "react-native";
 
-export const Avatar = ({ isLoadedAvatar, loadedAvatar, handleAddingAvatar }) => {
+export const Avatar = ({
+  isLoadedAvatar,
+  loadedAvatar,
+  handleAddingAvatar,
+}) => {
   return (
     <View style={styles.avatarWrap}>
-      <Image src={loadedAvatar ? loadedAvatar.uri : ""} style={styles.avatarImage} />
+      <Image
+        src={loadedAvatar ? loadedAvatar : ""}
+        style={styles.avatarImage}
+      />
       <View style={styles.addButtonWrap}>
         <Ionicons.Button
           name={isLoadedAvatar ? "close-circle-outline" : "add-circle-outline"}
@@ -14,12 +21,14 @@ export const Avatar = ({ isLoadedAvatar, loadedAvatar, handleAddingAvatar }) => 
           style={styles.iconButtonAdd}
           backgroundColor="transparent"
           onPress={handleAddingAvatar}
-        ></Ionicons.Button>
+        />
       </View>
     </View>
   );
 };
 
+// ******************** Styles ********************
+// *
 const styles = StyleSheet.create({
   avatarWrap: {
     position: "absolute",

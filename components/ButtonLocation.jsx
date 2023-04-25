@@ -1,6 +1,7 @@
-import { View, Text, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-export const ButtonLocation = ({ location, onPress }) => {
+import { View, Text, StyleSheet } from "react-native";
+
+export const ButtonLocation = ({ locationName, onPress }) => {
   return (
     <View style={styles.button}>
       <Ionicons.Button
@@ -8,16 +9,18 @@ export const ButtonLocation = ({ location, onPress }) => {
         size={24}
         iconStyle={{ marginRight: 4 }}
         color="#BDBDBD"
-        style={""}
+        style=""
         backgroundColor="transparent"
         onPress={onPress}
       >
-        <Text style={styles.text}>{location}</Text>
+        <Text style={styles.text}>{locationName}</Text>
       </Ionicons.Button>
     </View>
   );
 };
 
+// ******************** Styles ********************
+// *
 const styles = StyleSheet.create({
   button: {
     flex: 1,

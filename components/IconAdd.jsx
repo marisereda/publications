@@ -1,5 +1,5 @@
-import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import { View, StyleSheet } from "react-native";
 
 export const IconAdd = () => {
   return (
@@ -9,6 +9,8 @@ export const IconAdd = () => {
   );
 };
 
+// ******************** Styles ********************
+// *
 const styles = StyleSheet.create({
   iconWrap: {
     padding: 8,

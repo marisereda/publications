@@ -1,47 +1,32 @@
-import { useState } from "react";
-import { Text, ImageBackground, View, FlatList, StyleSheet } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
+import { useState } from "react";
+import {
+  Text,
+  ImageBackground,
+  View,
+  FlatList,
+  StyleSheet,
+} from "react-native";
+import { useSelector, useDispatch } from "react-redux";
 
-import { useScreen } from "../../hooks/useScreen";
-import { useUserGlobal } from "../../globalStore";
-import { PostListItem } from "../../components/PostListItem";
-import { Avatar } from "../../components/Avatar";
-import { ButtonLogOut } from "../../components/ButtonLogOut";
-
-const posts = [
-  {
-    id: "1",
-    photo: "https://res.cloudinary.com/diaxwbc3c/image/upload/v1681745149/cld-sample-2.jpg",
-    title: "Forest",
-    commentsAmount: "8",
-    likesAmount: "42",
-    location: "Ukraine",
-  },
-  {
-    id: "2",
-    photo: "https://res.cloudinary.com/diaxwbc3c/image/upload/v1681745149/cld-sample-2.jpg",
-    title: "Black Sea Sunset",
-    commentsAmount: "4",
-    likesAmount: "37",
-    location: "Ukraine",
-  },
-  {
-    id: "3",
-    photo: "https://res.cloudinary.com/diaxwbc3c/image/upload/v1681745149/cld-sample-2.jpg",
-    title: "Venice house",
-    commentsAmount: "5",
-    likesAmount: "58",
-    location: "Italy",
-  },
-];
+import { Avatar, ButtonLogOut, PostListItem } from "../../components";
+import { usePosts, useScreen } from "../../hooks";
+import { updateAvatar } from "../../redux/auth/authOperations";
+import { selectUser } from "../../redux/auth/authSlice";
 
 export const ProfileScreen = ({ navigation }) => {
-  const { screenWidth, isShowKeyboard, hideKeyboard, showKeyboard } = useScreen();
-  const [user, setUser] = useUserGlobal();
-  const [isLoadedAvatar, setIsLoadedAvatar] = useState(user?.loadedAvatar ? true : false);
-  const [loadedAvatar, setLoadedAvatar] = useState(user?.loadedAvatar ? user.loadedAvatar : null);
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
+  const posts = usePosts();
+  const userPosts = posts.filter((post) => post.uid === user.uid);
+  const { screenWidth } = useScreen();
+  const [isLoadedAvatar, setIsLoadedAvatar] = useState(!!user?.avatar);
+  const [loadedAvatar, setLoadedAvatar] = useState(
+    user?.avatar ? user.avatar : null
+  );
 
-  // -------------- Adding or removing Avatar ---------------
+  // ******************** Handle adding or removing Avatar ********************
+  // *
   const handleAddingAvatar = async () => {
     if (!isLoadedAvatar) {
       const res = await DocumentPicker.getDocumentAsync({
@@ -50,25 +35,38 @@ export const ProfileScreen = ({ navigation }) => {
       });
 
       if (res.type !== "success") {
-        console.log("File picking failed");
         return;
       }
-      setLoadedAvatar(res);
+      setLoadedAvatar(res.uri);
+      dispatch(updateAvatar(res.uri));
     } else if (isLoadedAvatar) {
       setLoadedAvatar(null);
+      dispatch(updateAvatar(null));
     }
     setIsLoadedAvatar(!isLoadedAvatar);
   };
 
   return (
-    <ImageBackground source={require("../../assets/images/photo-bg.jpg")} style={styles.backgroundImage}>
+    <ImageBackground
+      source={require("../../assets/images/photo-bg.jpg")}
+      style={styles.backgroundImage}
+    >
       <View style={{ ...styles.form, width: screenWidth }}>
-        <Avatar isLoadedAvatar={isLoadedAvatar} loadedAvatar={loadedAvatar} handleAddingAvatar={handleAddingAvatar} />
+        <Avatar
+          isLoadedAvatar={isLoadedAvatar}
+          loadedAvatar={loadedAvatar}
+          handleAddingAvatar={handleAddingAvatar}
+        />
         <ButtonLogOut style={{ alignSelf: "flex-end", marginBottom: 48 }} />
         <Text style={styles.title}>{user?.name ? user.name : user.email}</Text>
         <FlatList
-          data={posts}
-          renderItem={({ item }) => <PostListItem postItem={item} onPress={() => navigation.navigate("Comments")} />}
+          data={userPosts}
+          renderItem={({ item }) => (
+            <PostListItem
+              postItem={item}
+              onPress={() => navigation.navigate("Comments")}
+            />
+          )}
           keyExtractor={({ id }) => id}
         />
       </View>
@@ -76,6 +74,8 @@ export const ProfileScreen = ({ navigation }) => {
   );
 };
 
+// ******************** Styles ********************
+// *
 const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,

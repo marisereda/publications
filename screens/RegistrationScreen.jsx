@@ -1,36 +1,33 @@
-import { useState } from "react";
 import * as DocumentPicker from "expo-document-picker";
-import { useAuthGlobal } from "../globalStore";
-import { useUserGlobal } from "../globalStore";
-import { ButtonSubmit } from "../components/ButtonSubmit";
-
+import { useState } from "react";
 import {
   StyleSheet,
   View,
-  TouchableOpacity,
   Text,
   KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback,
   ImageBackground,
 } from "react-native";
-import { Input } from "../components/Input";
-import { SecuredInput } from "../components/SecuredInput";
-import { Avatar } from "../components/Avatar";
+import { useDispatch } from "react-redux";
+
+import { Avatar, ButtonSubmit, Input, SecuredInput } from "../components";
 import { useScreen } from "../hooks/useScreen";
+import { authSignUp } from "../redux/auth/authOperations";
 
 export const RegistrationScreen = ({ navigation }) => {
-  const [isAuth, setIsAuth] = useAuthGlobal();
-  const [user, setUser] = useUserGlobal();
   const [isPasswordSecured, setIsPasswordSecured] = useState(true);
   const [isLoadedAvatar, setIsLoadedAvatar] = useState(false);
   const [loadedAvatar, setLoadedAvatar] = useState(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { screenWidth, isShowKeyboard, hideKeyboard, showKeyboard } = useScreen();
+  const { screenWidth, isShowKeyboard, hideKeyboard, showKeyboard } =
+    useScreen();
+  const dispatch = useDispatch();
 
-  // -------------- Adding or removing Avatar ---------------
+  // ******************** Adding or removing Avatar ********************
+  // *
   const handleAddingAvatar = async () => {
     if (!isLoadedAvatar) {
       const res = await DocumentPicker.getDocumentAsync({
@@ -41,39 +38,38 @@ export const RegistrationScreen = ({ navigation }) => {
       if (res.type !== "success") {
         return;
       }
-      setLoadedAvatar(res);
+      setLoadedAvatar(res.uri);
     } else if (isLoadedAvatar) {
       setLoadedAvatar(null);
     }
     setIsLoadedAvatar(!isLoadedAvatar);
   };
 
-  // -------------- Submit registration --------------
+  // ******************** Handle Submit registration ********************
+  // *
   const handleSubmit = () => {
     hideKeyboard();
-    // console.log(`name:${name}`);
-    // console.log(`email:${email}`);
-    // console.log(`password:${password}`);
-    // console.log(`avatar:${loadedAvatar?.uri}`);
-
-    setUser({});
-    setUser({ name, email, loadedAvatar });
-    setName("");
-    setEmail("");
-    setPassword("");
-    setLoadedAvatar(null);
-    setIsPasswordSecured(true);
-    setIsLoadedAvatar(false);
-    setIsAuth(true);
+    dispatch(authSignUp({ name, email, password, avatar: loadedAvatar?.uri }));
   };
 
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback onPress={hideKeyboard}>
-        <ImageBackground source={require("../assets/images/photo-bg.jpg")} style={styles.backgroundImage}>
-          <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : ""}>
+        <ImageBackground
+          source={require("../assets/images/photo-bg.jpg")}
+          style={styles.backgroundImage}
+        >
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : ""}
+          >
             <TouchableWithoutFeedback onPress={hideKeyboard}>
-              <View style={{ ...styles.form, paddingBottom: isShowKeyboard ? 32 : 45, width: screenWidth }}>
+              <View
+                style={{
+                  ...styles.form,
+                  paddingBottom: isShowKeyboard ? 32 : 45,
+                  width: screenWidth,
+                }}
+              >
                 <Text style={styles.title}>Registration</Text>
                 <Avatar
                   isLoadedAvatar={isLoadedAvatar}
@@ -110,12 +106,12 @@ export const RegistrationScreen = ({ navigation }) => {
                 {!isShowKeyboard && (
                   <View>
                     <ButtonSubmit text="Sign up" onPress={handleSubmit} />
-                    {/* <TouchableOpacity style={styles.buttonSubmit} onPress={handleSubmit}>
-                      <Text style={styles.textButton}>Sign up</Text>
-                    </TouchableOpacity> */}
                     <Text style={styles.text}>
                       Have an account already?{" "}
-                      <Text style={styles.link} onPress={() => navigation.navigate("Login")}>
+                      <Text
+                        style={styles.link}
+                        onPress={() => navigation.navigate("Login")}
+                      >
                         Sign in
                       </Text>
                     </Text>
@@ -130,10 +126,12 @@ export const RegistrationScreen = ({ navigation }) => {
   );
 };
 
+// ******************** Styles ********************
+// *
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "green",
+    backgroundColor: "#fff",
 
     justifyContent: "center",
   },

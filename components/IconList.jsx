@@ -1,5 +1,5 @@
-import { View } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { View } from "react-native";
 
 export const IconList = ({ focused }) => {
   return (
@@ -16,10 +16,26 @@ export const IconList = ({ focused }) => {
         justifyContent: "center",
       }}
     >
-      <MaterialIcons name="crop-square" size={11} color={focused ? "#FF6C00" : "#212121"} />
-      <MaterialIcons name="crop-square" size={11} color={focused ? "#FF6C00" : "#212121"} />
-      <MaterialIcons name="crop-square" size={11} color={focused ? "#FF6C00" : "#212121"} />
-      <MaterialIcons name="crop-square" size={11} color={focused ? "#FF6C00" : "#212121"} />
+      <MaterialIcons
+        name="crop-square"
+        size={11}
+        color={focused ? "#FF6C00" : "#212121"}
+      />
+      <MaterialIcons
+        name="crop-square"
+        size={11}
+        color={focused ? "#FF6C00" : "#212121"}
+      />
+      <MaterialIcons
+        name="crop-square"
+        size={11}
+        color={focused ? "#FF6C00" : "#212121"}
+      />
+      <MaterialIcons
+        name="crop-square"
+        size={11}
+        color={focused ? "#FF6C00" : "#212121"}
+      />
     </View>
   );
 };

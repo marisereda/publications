@@ -1,23 +1,33 @@
 import { View, Image, Text, StyleSheet } from "react-native";
+import { useSelector } from "react-redux";
+
+import { formatDate } from "../helpers";
+import { selectUser } from "../redux/auth/authSlice";
 
 export const CommentsItem = ({ commentItem }) => {
-  const { id: index, avatar, comment, date } = commentItem;
+  const user = useSelector(selectUser);
+  const { uid, avatar, comment, date } = commentItem;
+
   return (
     <View style={styles.wrap}>
-      {index % 2 > 0 && (
+      {user.uid !== uid && (
         <View style={styles.commentWrap}>
           <Image source={{ uri: avatar }} style={styles.avatar} />
           <View style={{ ...styles.textField, borderTopLeftRadius: 0 }}>
             <Text style={styles.comment}>{comment}</Text>
-            <Text style={{ ...styles.date, textAlign: "right" }}>{date}</Text>
+            <Text style={{ ...styles.date, textAlign: "right" }}>
+              {formatDate(date)}
+            </Text>
           </View>
         </View>
       )}
-      {index % 2 === 0 && (
+      {user.uid === uid && (
         <View style={styles.commentWrap}>
           <View style={{ ...styles.textField, borderTopRightRadius: 0 }}>
             <Text style={styles.comment}>{comment}</Text>
-            <Text style={{ ...styles.date, textAlign: "left" }}>{date}</Text>
+            <Text style={{ ...styles.date, textAlign: "left" }}>
+              {formatDate(date)}
+            </Text>
           </View>
           <Image source={{ uri: avatar }} style={styles.avatar} />
         </View>
@@ -26,6 +36,8 @@ export const CommentsItem = ({ commentItem }) => {
   );
 };
 
+// ******************** Styles ********************
+// *
 const styles = StyleSheet.create({
   wrap: {},
   commentWrap: {

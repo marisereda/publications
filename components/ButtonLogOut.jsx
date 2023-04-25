@@ -1,15 +1,14 @@
 import { Feather } from "@expo/vector-icons";
 import { View } from "react-native";
-import { useAuthGlobal } from "../globalStore";
-import { useUserGlobal } from "../globalStore";
+import { useDispatch } from "react-redux";
+
+import { authSignOut } from "../redux/auth/authOperations";
 
 export const ButtonLogOut = (props) => {
-  const [isAuth, setIsAuth] = useAuthGlobal();
-  const [user, setUser] = useUserGlobal();
+  const dispatch = useDispatch();
 
   const handleLogOut = () => {
-    setIsAuth(false);
-    setUser({});
+    dispatch(authSignOut());
   };
 
   return (
@@ -19,10 +18,10 @@ export const ButtonLogOut = (props) => {
         size={24}
         iconStyle={{ marginRight: 0 }}
         color="#BDBDBD"
-        style={""}
+        style=""
         backgroundColor="transparent"
         onPress={handleLogOut}
-      ></Feather.Button>
+      />
     </View>
   );
 };

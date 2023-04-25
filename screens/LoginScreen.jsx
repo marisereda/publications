@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   StyleSheet,
   View,
@@ -6,47 +6,49 @@ import {
   Text,
   KeyboardAvoidingView,
   Platform,
-  Keyboard,
   TouchableWithoutFeedback,
   ImageBackground,
 } from "react-native";
-import { Input } from "../components/Input";
-import { SecuredInput } from "../components/SecuredInput";
-import { useAuthGlobal } from "../globalStore";
-import { useUserGlobal } from "../globalStore";
+import { useDispatch } from "react-redux";
 
+import { Input, SecuredInput } from "../components";
 import { useScreen } from "../hooks/useScreen";
-import { ButtonSubmit } from "../components/ButtonSubmit";
+import { authSignIn } from "../redux/auth/authOperations";
 
 export const LoginScreen = ({ navigation }) => {
-  const [isAuth, setIsAuth] = useAuthGlobal();
-  const [user, setUser] = useAuthGlobal();
-
-  const [passwordSecure, setPasswordSecure] = useState(true);
+  const [isPasswordSecured, setIsPasswordSecured] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { screenWidth, isShowKeyboard, hideKeyboard, showKeyboard } = useScreen();
+  const { screenWidth, isShowKeyboard, hideKeyboard, showKeyboard } =
+    useScreen();
 
-  // -------------- Submit enter --------------
+  const dispatch = useDispatch();
+
+  // ******************** Handle submit ********************
+  // *
   const handleSubmit = () => {
     hideKeyboard();
-    // console.log(`email:${email}`);
-    // console.log(`password:${password}`);
-    setUser({});
-    setUser({ email });
-    setEmail("");
-    setPassword("");
-    setPasswordSecure(true);
-    setIsAuth(true);
+    dispatch(authSignIn({ email, password }));
   };
 
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback onPress={hideKeyboard}>
-        <ImageBackground source={require("../assets/images/photo-bg.jpg")} style={styles.backgroundImage}>
-          <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : ""}>
+        <ImageBackground
+          source={require("../assets/images/photo-bg.jpg")}
+          style={styles.backgroundImage}
+        >
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : ""}
+          >
             <TouchableWithoutFeedback onPress={hideKeyboard}>
-              <View style={{ ...styles.form, paddingBottom: isShowKeyboard ? 32 : 144, width: screenWidth }}>
+              <View
+                style={{
+                  ...styles.form,
+                  paddingBottom: isShowKeyboard ? 32 : 144,
+                  width: screenWidth,
+                }}
+              >
                 <Text style={styles.title}>Enter</Text>
                 <View style={styles.fieldsWrap}>
                   <Input
@@ -63,18 +65,24 @@ export const LoginScreen = ({ navigation }) => {
                     value={password}
                     onChangeText={setPassword}
                     showKeyboard={showKeyboard}
-                    passwordSecure={passwordSecure}
-                    onPress={setPasswordSecure}
+                    isPasswordSecured={isPasswordSecured}
+                    onPress={setIsPasswordSecured}
                   />
                 </View>
                 {!isShowKeyboard && (
                   <View>
-                    <TouchableOpacity style={styles.buttonSubmit} onPress={handleSubmit}>
+                    <TouchableOpacity
+                      style={styles.buttonSubmit}
+                      onPress={handleSubmit}
+                    >
                       <Text style={styles.textButton}>Sign in</Text>
                     </TouchableOpacity>
                     <Text style={styles.text}>
                       Haven't got an account yet?{" "}
-                      <Text style={styles.link} onPress={() => navigation.navigate("Register")}>
+                      <Text
+                        style={styles.link}
+                        onPress={() => navigation.navigate("Register")}
+                      >
                         Sign up
                       </Text>
                     </Text>
@@ -89,10 +97,12 @@ export const LoginScreen = ({ navigation }) => {
   );
 };
 
+// ******************** Styles ********************
+// *
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "green",
+    backgroundColor: "#fff",
 
     justifyContent: "center",
   },

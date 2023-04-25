@@ -1,24 +1,45 @@
-import { View, Text, StyleSheet } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
+import { View, Text, StyleSheet } from "react-native";
+import { useSelector } from "react-redux";
 
-export const ButtonLikes = ({ likesAmount }) => {
+import { mutateData } from "../helpers";
+import { selectUser } from "../redux/auth/authSlice";
+
+export const ButtonLikes = ({ postItem }) => {
+  const user = useSelector(selectUser);
+  const isLiked = postItem.likes.includes(user.uid);
+
+  // ******************** Handle Like button click ********************
+  // *
+  const handleLikeClick = async () => {
+    let likes = [];
+    if (isLiked) {
+      likes = postItem.likes.filter((item) => item !== user.uid);
+    } else {
+      likes = [...postItem.likes, user.uid];
+    }
+    await mutateData("posts", postItem.id, { likes });
+  };
+
   return (
     <View style={styles.button}>
       <AntDesign.Button
-        name="like2"
+        name={isLiked ? "like1" : "like2"}
         size={24}
         iconStyle={{ marginRight: 6 }}
         color="#FF6C00"
-        style={""}
+        style=""
         backgroundColor="transparent"
-        // onPress={() => navigation.goBack()}
+        onPress={handleLikeClick}
       >
-        <Text style={styles.text}>{likesAmount}</Text>
+        <Text style={styles.text}>{postItem.likes.length}</Text>
       </AntDesign.Button>
     </View>
   );
 };
 
+// ******************** Styles ********************
+// *
 const styles = StyleSheet.create({
   button: {
     marginRight: 24,

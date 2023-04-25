@@ -1,6 +1,7 @@
-import { Input } from "./Input";
-import { StyleSheet, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { StyleSheet, View } from "react-native";
+
+import { Input } from "./Input";
 
 export const SecuredInput = ({
   textContentType,
@@ -30,12 +31,14 @@ export const SecuredInput = ({
           style={styles.iconButton}
           backgroundColor="transparent"
           onPress={() => onPress(!isPasswordSecured)}
-        ></Ionicons.Button>
+        />
       </View>
     </View>
   );
 };
 
+// ******************** Styles ********************
+// *
 const styles = StyleSheet.create({
   passwordWrap: {
     position: "absolute",
@@ -43,6 +46,7 @@ const styles = StyleSheet.create({
     right: 0,
     height: "100%",
   },
+
   iconButton: {
     height: "100%",
     padding: 10,

@@ -23,8 +23,10 @@ export const Input = ({
       textContentType={textContentType}
       autoComplete="off"
       placeholder={placeholder}
-      style={{ ...getStyles(variant, isFocused), paddingLeft: isIcon ? 30 : 16 }}
-      // style={{ ...styles.input, borderColor: isFocusedInput ? "#FF6C00" : "#E8E8E8" }}
+      style={{
+        ...getStyles(variant, isFocused),
+        paddingLeft: isIcon ? 30 : 16,
+      }}
       value={value}
       onFocus={handleFocus}
       onBlur={() => setIsFocused(false)}
@@ -33,7 +35,8 @@ export const Input = ({
     />
   );
 };
-
+// ******************** Styles ********************
+// *
 const getStyles = (variant, isFocused) => {
   const focusedStyle = isFocused ? styles.focused : {};
   return { ...styles[variant], ...focusedStyle };
@@ -48,7 +51,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: "#F6F6F6",
     borderColor: "#E8E8E8",
-    // marginBottom: 16,
   },
 
   focused: {

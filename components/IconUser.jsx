@@ -1,5 +1,5 @@
-import { View, Image } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import { View } from "react-native";
 
 export const IconUser = ({ focused }) => {
   return (
@@ -7,8 +7,6 @@ export const IconUser = ({ focused }) => {
       style={{
         padding: 8,
         alignSelf: "center",
-        // borderColor: focused ? "green" : "red",
-        // borderWidth: 1,
       }}
     >
       <Feather name="user" size={24} color={focused ? "#FF6C00" : "#212121"} />
