@@ -16,6 +16,7 @@
     "@react-navigation/native-stack": "^6.9.12",
     "@reduxjs/toolkit": "^1.9.5",
     "date-fns": "^2.29.3",
+    "eas-cli": "^3.10.1",
     "expo": "~48.0.6",
     "expo-camera": "~13.2.1",
     "expo-document-picker": "~11.2.1",
@@ -36,7 +37,8 @@
     "react-native-uuid": "^2.0.1",
     "react-native-vector-icons": "^9.2.0",
     "react-native-web": "~0.18.10",
-    "react-redux": "^8.0.5"
+    "react-redux": "^8.0.5",
+    "expo-updates": "~0.16.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
@@ -47,5 +49,5 @@
   "overrides": {
     "react-devtools-core": "~4.25.0"
   },
-  "private": true
+  "private": false
 }
