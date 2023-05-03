@@ -2,9 +2,8 @@
 
 The mobile app for creating and sharing photo posts between authorized users.
 
-[registration page](../../avatar/registraition.png)
-
-[profile page](../../avatar/profile.png)
+![registraition](https://user-images.githubusercontent.com/105078220/236054162-d3ab3abd-23fc-4241-b2e8-f5743dac21e7.png)
+![profile](https://user-images.githubusercontent.com/105078220/236054192-afa678b8-9651-41f4-b257-afee980777a2.png)
 
 ## Features
 
@@ -35,7 +34,8 @@ The mobile app for creating and sharing photo posts between authorized users.
 or
 
 - Scan QR Code with your cell phone
-  [Android QR](../../avatar/android.png)
+
+![android](https://user-images.githubusercontent.com/105078220/236054308-cb65609a-1ef9-4d07-8fe1-5f055cc2a6eb.png)
 
 ## Run on IOS
 
@@ -50,4 +50,6 @@ or
 or
 
 - Scan QR Code with your cell phone
-  [IOS QR](../../avatar/ios.png)
+
+![ios](https://user-images.githubusercontent.com/105078220/236054380-2d6845c0-11e8-41f6-a20c-8851e7e2e36e.png)
+
