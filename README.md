@@ -2,8 +2,9 @@
 
 The mobile app for creating and sharing photo posts between authorized users.
 
-![registraition](https://user-images.githubusercontent.com/105078220/236054162-d3ab3abd-23fc-4241-b2e8-f5743dac21e7.png)
-![profile](https://user-images.githubusercontent.com/105078220/236054192-afa678b8-9651-41f4-b257-afee980777a2.png)
+![registration](https://user-images.githubusercontent.com/105078220/236145577-454c9744-3aa8-4207-8a4a-d750defcf80d.png)
+![posts](https://user-images.githubusercontent.com/105078220/236145688-9e5338e2-a163-4d09-a47e-7b5951a61487.png)
+![comments](https://user-images.githubusercontent.com/105078220/236145717-42308490-0ffd-4cbe-b1a2-79bc97ef9b95.png)
 
 ## Features
 
@@ -33,9 +34,10 @@ The mobile app for creating and sharing photo posts between authorized users.
 
 or
 
-- Scan QR Code with your cell phone
+- Scan the following QR code with an Android device to open it in Expo Go.
 
-![android](https://user-images.githubusercontent.com/105078220/236054308-cb65609a-1ef9-4d07-8fe1-5f055cc2a6eb.png)
+![android_](https://user-images.githubusercontent.com/105078220/236144199-e475f0de-7b51-4980-9930-570fc07c58dc.png)
+
 
 ## Run on IOS
 
@@ -49,7 +51,7 @@ or
 
 or
 
-- Scan QR Code with your cell phone
+- Scan the following QR code with an iOS device to open it in Expo Go.
 
-![ios](https://user-images.githubusercontent.com/105078220/236054380-2d6845c0-11e8-41f6-a20c-8851e7e2e36e.png)
+![ios_](https://user-images.githubusercontent.com/105078220/236144158-78454f83-118b-40be-8445-7097e20bcf83.png)
 
